@@ -26,6 +26,18 @@ describe Game do
         game.play
         expect(output.string).to include("You missed, try again")
       end
+
+      it "returns prompt to keep guessing with invalid moves" do
+        messages = Messages.new
+        output = StringIO.new
+        input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n2")
+        console = Console.new(output, input)
+        display = Display.new(console, messages)
+        board = Board.new
+        game = Game.new(display, board)
+        game.play
+        expect(output.string).to include("You missed, try again")
+      end
     end
   end
 end

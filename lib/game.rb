@@ -13,8 +13,8 @@ class Game
     coordinate = board_with_ship[@row][@column.to_i]
     outcome = @board.hit_or_miss(board_with_ship, coordinate)
     new_board = mark_board_with_hit_or_miss(outcome, board_with_ship)
-    @display.present_initial_board(new_board)
-    win?(outcome)
+    @display.present_board(new_board)
+    win_or_retry_message?(outcome)
     replay?(outcome, new_board)
   end
 
@@ -24,8 +24,8 @@ class Game
       coordinate = board[@row][@column.to_i]
       outcome = @board.hit_or_miss(board, coordinate)
       new_board = mark_board_with_hit_or_miss(outcome, board)
-      @display.present_initial_board(new_board)
-      win?(outcome)
+      @display.present_board(new_board)
+      win_or_retry_message?(outcome)
     end
   end
 
@@ -33,16 +33,20 @@ class Game
     @display.welcome
   end
 
+  def hash_grid
+    @board.create_grid_using_hashes(dimension_of_board)
+  end
+
+  def dimension_of_board
+    100
+  end
+
   def present_board
-    @display.present_initial_board(hash_grid)
+    @display.present_board(hash_grid)
   end
 
   def board_with_ship
     @board.place_ship(hash_grid)
-  end
-
-  def hash_grid
-    @board.create_grid_using_hashes(100)
   end
 
   def get_coordinates
@@ -53,11 +57,11 @@ class Game
   end
 
   def get_row
-    @display.user_input_coordinate
+    @display.valid_row(Math.sqrt(dimension_of_board))
   end
 
   def get_column
-    @display.user_input_coordinate
+    @display.valid_column(Math.sqrt(dimension_of_board))
   end
 
   def state_of_board(board, mark)
@@ -72,7 +76,7 @@ class Game
     end
   end
 
-  def win?(outcome)
+  def win_or_retry_message?(outcome)
     if outcome == "miss"
       @display.present_retry_message
     elsif outcome == "hit"

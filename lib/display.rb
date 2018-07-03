@@ -15,6 +15,30 @@ class Display
     @console.receive
   end
 
+  def valid_row(size)
+    alphabet = ("A".."Z").to_a
+    letter = alphabet[size - 1]
+    row = user_input_coordinate.upcase
+    possible_moves = ("A".."#{letter}").to_a
+    if !possible_moves.include?(row)
+      user_input_row
+      valid_row(size)
+    else
+      row
+    end
+  end
+
+  def valid_column(size)
+    column = user_input_coordinate
+    possible_moves = ("1".."#{size.to_i}").to_a
+    if !possible_moves.include?(column)
+      user_input_column
+      valid_column(size)
+    else
+      column
+    end
+  end
+
   def user_input_row
     @console.present(@messages.prompt_for_row)
   end
@@ -23,8 +47,8 @@ class Display
     @console.present(@messages.prompt_for_column)
   end
 
-  def present_initial_board(board)
-    present_header(board)
+  def present_board(board)
+    present_header_with_numbers(board)
     board.each do |letter, cells|
       each_row = cells.map do |cell|
         reveal(cell)
@@ -34,18 +58,18 @@ class Display
     end
   end
 
+  def present_header_with_numbers(board)
+    columns = (0..board.count).to_a
+    numbers = columns.join(" ")
+    @console.present("#{numbers}")
+  end
+
   def reveal(cell)
     if cell != @messages.miss_mark && cell != @messages.hit_mark
       @messages.board_mark
     else
       cell
     end
-  end
-
-  def present_header(board)
-    columns = (0..board.count).to_a
-    numbers = columns.join(" ")
-    @console.present("#{numbers}")
   end
 
   def present_winning_message

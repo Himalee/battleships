@@ -13,11 +13,11 @@ class Messages
   end
 
   def hit_mark
-    "X"
+    "🔥"
   end
 
   def miss_mark
-    "O"
+    "🌊"
   end
 
   def ship_mark

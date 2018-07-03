@@ -6,7 +6,8 @@ class Board
     alphabet = ("A".."Z").to_a
     letters = alphabet[0..size - 1]
     for letter in letters
-      grid[letter] = (1..size).to_a
+      numbers = (1..size).to_a
+      grid[letter] = numbers
     end
     grid
   end
