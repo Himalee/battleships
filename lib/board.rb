@@ -2,14 +2,9 @@ class Board
 
   def create_grid(dimension)
     size = Math.sqrt(dimension)
-    grid = {}
     alphabet = ("A".."Z").to_a
     letters = alphabet[0..size - 1]
-    for letter in letters
-      numbers = (1..size).to_a
-      grid[letter] = numbers
-    end
-    grid
+    letters.inject({}) {|result, element| result[element] = (1..size).to_a; result }
   end
 
   def mark_board(grid, row, column, mark)
