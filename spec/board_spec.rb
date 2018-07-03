@@ -8,12 +8,12 @@ describe Board do
 
   it "returns hash of 9x9 grid" do
     dimension = 9
-    expect(@board.create_grid_using_hashes(dimension)).to eql({"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, 2, 3]})
+    expect(@board.create_grid(dimension)).to eql({"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, 2, 3]})
   end
 
   it "returns hash of 2x2 grid" do
     dimension = 4
-    expect(@board.create_grid_using_hashes(dimension)).to eql({"A"=>[1, 2], "B"=>[1, 2]})
+    expect(@board.create_grid(dimension)).to eql({"A"=>[1, 2], "B"=>[1, 2]})
   end
 
   context "returns new hash" do

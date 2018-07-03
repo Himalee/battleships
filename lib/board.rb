@@ -1,6 +1,6 @@
 class Board
 
-  def create_grid_using_hashes(dimension)
+  def create_grid(dimension)
     size = Math.sqrt(dimension)
     grid = {}
     alphabet = ("A".."Z").to_a

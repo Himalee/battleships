@@ -34,7 +34,7 @@ class Game
   end
 
   def hash_grid
-    @board.create_grid_using_hashes(dimension_of_board)
+    @board.create_grid(dimension_of_board)
   end
 
   def dimension_of_board
