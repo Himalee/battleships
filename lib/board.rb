@@ -8,8 +8,7 @@ class Board
   end
 
   def mark_board(grid, row, column, mark)
-    new_column = column - 1
-    grid[row][new_column] = mark
+    grid[row][column - 1] = mark
     grid
   end
 
@@ -23,7 +22,8 @@ class Board
     "-"
   end
 
-  def hit_or_miss(grid_with_ships, coordinate)
+  def hit_or_miss(grid_with_ships, row, column)
+    coordinate = grid_with_ships[row][column - 1]
     if coordinate == ship_mark
       "hit"
     else

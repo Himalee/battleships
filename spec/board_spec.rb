@@ -38,14 +38,24 @@ describe Board do
 
   it "returns miss" do
     grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
-    coordinate = grid_with_ships["A"][1]
-    expect(@board.hit_or_miss(grid_with_ships, coordinate)).to eql("miss")
+    expect(@board.hit_or_miss(grid_with_ships, "A", 1)).to eql("miss")
+  end
+
+  it "returns miss" do
+    grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
+    # require "pry"
+    # binding.pry
+    expect(@board.hit_or_miss(grid_with_ships, "C", 1)).to eql("miss")
   end
 
   it "returns hit" do
     grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
-    coordinate = grid_with_ships["C"][2]
-    expect(@board.hit_or_miss(grid_with_ships, coordinate)).to eql("hit")
+    expect(@board.hit_or_miss(grid_with_ships, "C", 2)).to eql("hit")
+  end
+
+  it "returns hit" do
+    grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
+    expect(@board.hit_or_miss(grid_with_ships, "C", 3)).to eql("hit")
   end
 
 end

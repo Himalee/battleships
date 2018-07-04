@@ -11,21 +11,21 @@ class Game
     board_with_ship
     get_coordinates
     coordinate = board_with_ship[@row][@column.to_i]
-    outcome = @board.hit_or_miss(board_with_ship, coordinate)
+    outcome = @board.hit_or_miss(board_with_ship, @row, @column.to_i)
     new_board = mark_board_with_hit_or_miss(outcome, board_with_ship)
     @display.present_board(new_board)
-    win_or_retry_message?(outcome)
-    replay?(outcome, new_board)
+    win_or_retry_message(outcome)
+    replay(outcome, new_board)
   end
 
-  def replay?(outcome, board)
+  def replay(outcome, board)
     while outcome == "miss"
       get_coordinates
       coordinate = board[@row][@column.to_i]
-      outcome = @board.hit_or_miss(board, coordinate)
+      outcome = @board.hit_or_miss(board, @row, @column.to_i)
       new_board = mark_board_with_hit_or_miss(outcome, board)
       @display.present_board(new_board)
-      win_or_retry_message?(outcome)
+      win_or_retry_message(outcome)
     end
   end
 
@@ -76,7 +76,7 @@ class Game
     end
   end
 
-  def win_or_retry_message?(outcome)
+  def win_or_retry_message(outcome)
     if outcome == "miss"
       @display.present_retry_message
     elsif outcome == "hit"

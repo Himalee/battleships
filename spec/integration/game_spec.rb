@@ -30,7 +30,7 @@ describe Game do
       it "returns prompt to keep guessing with invalid moves" do
         messages = Messages.new
         output = StringIO.new
-        input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n2")
+        input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n1\nC\n2")
         console = Console.new(output, input)
         display = Display.new(console, messages)
         board = Board.new
