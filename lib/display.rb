@@ -80,6 +80,10 @@ class Display
     @console.present(@messages.retry_message)
   end
 
+  def hit_boat_message
+    @console.present(@messages.hit_message)
+  end
+
   def miss
     @messages.miss_mark
   end
@@ -87,4 +91,5 @@ class Display
   def hit
     @messages.hit_mark
   end
+
 end

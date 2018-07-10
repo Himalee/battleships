@@ -1,3 +1,8 @@
+require_relative "messages"
+require_relative "console"
+require_relative "display"
+require_relative "board"
+
 class Game
 
   def initialize(display, board)
@@ -8,25 +13,28 @@ class Game
   def play
     welcome
     present_board
-    board_with_ship
-    get_coordinates
-    coordinate = board_with_ship[@row][@column.to_i]
-    outcome = @board.hit_or_miss(board_with_ship, @row, @column.to_i)
-    new_board = mark_board_with_hit_or_miss(outcome, board_with_ship)
-    @display.present_board(new_board)
-    win_or_retry_message(outcome)
-    replay(outcome, new_board)
+    @result1 = turn(board_with_ship)
+    until hit_all?(@result1[0])
+      @result1 = turn(@result1[1])
+    end
   end
 
-  def replay(outcome, board)
-    while outcome == "miss"
-      get_coordinates
-      coordinate = board[@row][@column.to_i]
-      outcome = @board.hit_or_miss(board, @row, @column.to_i)
-      new_board = mark_board_with_hit_or_miss(outcome, board)
-      @display.present_board(new_board)
-      win_or_retry_message(outcome)
-    end
+  def turn(board)
+    result = []
+    get_coordinates
+    coordinate = board[@row][@column.to_i]
+    outcome = @board.hit_or_miss(board, @row, @column.to_i)
+    new_board = mark_board_with_hit_or_miss(outcome, board)
+    @display.present_board(new_board)
+    all_boats_hit = @board.hit_all(new_board)
+    win_or_retry_message(outcome, all_boats_hit)
+    result << all_boats_hit
+    result << new_board
+    result
+  end
+
+  def hit_all?(all_boats_hit)
+    all_boats_hit == "hit all"
   end
 
   def welcome
@@ -76,11 +84,13 @@ class Game
     end
   end
 
-  def win_or_retry_message(outcome)
-    if outcome == "miss"
-      @display.present_retry_message
-    elsif outcome == "hit"
+  def win_or_retry_message(outcome, all_boats_hit)
+    if outcome == "hit" && all_boats_hit == "hit all"
       @display.present_winning_message
+    elsif outcome == "hit"
+      @display.hit_boat_message
+    else
+      @display.present_retry_message
     end
   end
 end
