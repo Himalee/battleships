@@ -30,4 +30,13 @@ class Board
       "miss"
     end
   end
+
+  def hit_all(grid_with_ships)
+    marks = grid_with_ships.values.flatten
+    if marks.include?(ship_mark)
+      "not hit all"
+    else
+      "hit all"
+    end
+  end
 end

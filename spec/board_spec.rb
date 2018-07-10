@@ -43,8 +43,6 @@ describe Board do
 
   it "returns miss" do
     grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
-    # require "pry"
-    # binding.pry
     expect(@board.hit_or_miss(grid_with_ships, "C", 1)).to eql("miss")
   end
 
@@ -56,6 +54,19 @@ describe Board do
   it "returns hit" do
     grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
     expect(@board.hit_or_miss(grid_with_ships, "C", 3)).to eql("hit")
+  end
+
+  it "returns hit all" do
+    grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
+    @board.mark_board(grid_with_ships, "C", 2, "X")
+    @board.mark_board(grid_with_ships, "C", 3, "X")
+    expect(@board.hit_all(grid_with_ships)).to eql("hit all")
+  end
+
+  it "returns not hit all" do
+    grid_with_ships = {"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]}
+    @board.mark_board(grid_with_ships, "C", 2, "X")
+    expect(@board.hit_all(grid_with_ships)).to eql("not hit all")
   end
 
 end
