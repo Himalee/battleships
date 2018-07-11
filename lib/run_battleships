@@ -4,9 +4,11 @@ require_relative "game"
 require_relative "display"
 require_relative "board"
 require_relative "messages"
+require_relative "ship"
 
 messages = Messages.new
 display = Display.new(messages)
-board = Board.new
+dimension = 100
+board = Board.new(dimension)
 game = Game.new(display, board)
 game.play

@@ -8,7 +8,7 @@ describe Game do
       input = StringIO.new("C\n2\nC\n3")
       console = Console.new(output, input)
       display = Display.new(console, messages)
-      board = Board.new
+      board = Board.new(100)
       game = Game.new(display, board)
       game.play
       expect(output.string).to include("You win!")
@@ -21,7 +21,7 @@ describe Game do
         input = StringIO.new("A\n1\nB\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
         display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
         game = Game.new(display, board)
 
         game.play
@@ -34,7 +34,7 @@ describe Game do
         input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
         display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
         game = Game.new(display, board)
         game.play
         expect(output.string).to include("You missed, try again")

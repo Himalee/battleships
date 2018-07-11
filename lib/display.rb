@@ -11,8 +11,41 @@ class Display
     @console.present(@messages.welcome_message)
   end
 
+  def present_board(board)
+    present_header_with_numbers(board)
+    board.each do |letter, cells|
+      each_row = cells.map do |cell|
+        reveal(cell)
+      end
+    rows = each_row.join(" ")
+    @console.present("#{letter} #{rows}")
+    end
+  end
+
+  def present_header_with_numbers(board)
+    columns = (0..board.count).to_a
+    numbers = columns.join(" ")
+    @console.present("#{numbers}")
+  end
+
+  def reveal(cell)
+    if cell != Peg.new.miss && cell != Peg.new.hit
+      Peg.new.board
+    else
+      cell
+    end
+  end
+
   def user_input_coordinate
     @console.receive
+  end
+
+  def user_input_row
+    @console.present(@messages.prompt_for_row)
+  end
+
+  def user_input_column
+    @console.present(@messages.prompt_for_column)
   end
 
   def valid_row(size)
@@ -39,39 +72,6 @@ class Display
     end
   end
 
-  def user_input_row
-    @console.present(@messages.prompt_for_row)
-  end
-
-  def user_input_column
-    @console.present(@messages.prompt_for_column)
-  end
-
-  def present_board(board)
-    present_header_with_numbers(board)
-    board.each do |letter, cells|
-      each_row = cells.map do |cell|
-        reveal(cell)
-      end
-    rows = each_row.join(" ")
-    @console.present("#{letter} #{rows}")
-    end
-  end
-
-  def present_header_with_numbers(board)
-    columns = (0..board.count).to_a
-    numbers = columns.join(" ")
-    @console.present("#{numbers}")
-  end
-
-  def reveal(cell)
-    if cell != @messages.miss_mark && cell != @messages.hit_mark
-      @messages.board_mark
-    else
-      cell
-    end
-  end
-
   def present_winning_message
     @console.present(@messages.winning_message)
   end
@@ -80,16 +80,11 @@ class Display
     @console.present(@messages.retry_message)
   end
 
-  def hit_boat_message
+  def present_hit_boat_message
     @console.present(@messages.hit_message)
   end
 
-  def miss
-    @messages.miss_mark
+  def present_goodbye_message
+    @console.present(@messages.goodbye)
   end
-
-  def hit
-    @messages.hit_mark
-  end
-
 end

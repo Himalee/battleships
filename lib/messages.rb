@@ -12,22 +12,6 @@ class Messages
     "Column (number):"
   end
 
-  def hit_mark
-    "X"
-  end
-
-  def miss_mark
-    "O"
-  end
-
-  def ship_mark
-    "-"
-  end
-
-  def board_mark
-    "."
-  end
-
   def winning_message
     "The ship has been sunk 💣  You win!! 🎉"
   end
@@ -42,5 +26,9 @@ class Messages
 
   def hit_message
     "You have hit a boat, keep trying.."
+  end
+
+  def goodbye
+    "Goodbye 👋"
   end
 end
