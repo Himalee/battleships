@@ -12,9 +12,11 @@ class Game
     @board = board
   end
 
-  def play
+  def play(ship_mode)
     welcome
-    present_board(@board.grid_with_ships)
+    @board.place_ships_on_grid(ship_mode)
+    present_board(@board.grid)
+    marks = @board.grid.values.flatten
     until @board.hit_all?(@board.grid)
       turn(@board.grid)
     end
@@ -24,7 +26,7 @@ class Game
   def turn(grid)
     get_coordinates
     mark_board_with_hit_or_miss
-    @display.present_board(@board.grid)
+    present_board(@board.grid)
     win_or_retry_message
   end
 

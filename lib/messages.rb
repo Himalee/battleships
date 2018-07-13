@@ -13,7 +13,7 @@ class Messages
   end
 
   def winning_message
-    "The ship has been sunk 💣  You win!! 🎉"
+    "The ships have been sunk 💣  You win!! 🎉"
   end
 
   def losing_message

@@ -1,7 +1,7 @@
 require "game"
 
 describe Game do
-  context "one guess" do
+  context "one hard coded ship" do
     it "returns win" do
       messages = Messages.new
       output = StringIO.new
@@ -10,7 +10,7 @@ describe Game do
       display = Display.new(console, messages)
       board = Board.new(100)
       game = Game.new(display, board)
-      game.play
+      game.play(1)
       expect(output.string).to include("You win!")
     end
 
@@ -24,7 +24,7 @@ describe Game do
         board = Board.new(100)
         game = Game.new(display, board)
 
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
 
@@ -36,7 +36,7 @@ describe Game do
         display = Display.new(console, messages)
         board = Board.new(100)
         game = Game.new(display, board)
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
     end
