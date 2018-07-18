@@ -8,7 +8,10 @@ class Board
   end
 
   def create_grid
-    possible_rows.inject({}) { |result, element| result[element] = possible_columns; result }
+    possible_rows.inject({}) do |result, element|
+      result[element] = possible_columns
+      result
+    end
   end
 
   def size_of_board
@@ -22,18 +25,6 @@ class Board
 
   def possible_columns
     (1..size_of_board).to_a
-  end
-
-  def place_ships_on_grid(ship_mode)
-    if ship_mode == 1
-      grid_with_one_hardcoded_ship
-    elsif ship_mode == 2
-      grid_with_one_random_ship
-    end
-  end
-
-  def grid_with_one_random_ship
-    right_direction_mark_board(Ship.new.random_ship)
   end
 
   def grid_with_one_hardcoded_ship
@@ -59,38 +50,5 @@ class Board
   def hit_all?(grid_with_ships)
     marks = grid_with_ships.values.flatten
     !marks.include?(ship_mark)
-  end
-
-  def random_row
-    possible_rows.sample
-  end
-
-  def random_column
-    possible_columns.sample
-  end
-
-  def right_direction_valid_columns(ship_size)
-    restriction = ship_size - 1
-    valid_columns = possible_columns[0...-restriction]
-    random_column = valid_columns.sample
-    column_options = []
-    length_of_boat = 0
-    until length_of_boat == ship_size
-      column_options << random_column
-      random_column += 1
-      length_of_boat += 1
-    end
-    column_options
-  end
-
-  def right_direction_mark_board(ship_size)
-    row = random_row
-    possible_columns = right_direction_valid_columns(ship_size)
-    column_coordinate = 0
-    until column_coordinate == ship_size
-      mark_board(row, possible_columns[column_coordinate], ship_mark)
-      column_coordinate += 1
-    end
-    @grid
   end
 end

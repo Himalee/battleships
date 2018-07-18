@@ -8,7 +8,7 @@ require_relative "ship"
 
 messages = Messages.new
 display = Display.new(messages)
-dimension = 36
+dimension = 25
 board = Board.new(dimension)
 game = Game.new(display, board)
 game.play(2)

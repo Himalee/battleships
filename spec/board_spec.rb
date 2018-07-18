@@ -55,20 +55,4 @@ describe Board do
       expect(@board.hit_all?(@board.grid)).to be false
     end
   end
-
-  context "placing one ship randomly on board" do
-    it "using 10x10 grid, returns number of valid columns given ship size" do
-      board = Board.new(100)
-      ship_size = 5
-      valid_columns = board.right_direction_valid_columns(ship_size)
-      expect(valid_columns.size).to eql(5)
-    end
-
-    it "using 10x10 grid, returns number of ship pegs on grid given ship size" do
-      board = Board.new(100)
-      marked_board = board.right_direction_mark_board(5)
-      number_of_ship_marks = board.grid.values.flatten.count(Peg.new.ship)
-      expect(number_of_ship_marks).to eql(5)
-    end
-  end
 end

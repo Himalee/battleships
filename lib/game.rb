@@ -3,6 +3,7 @@ require_relative "console"
 require_relative "display"
 require_relative "board"
 require_relative "peg"
+require_relative "computer_player"
 
 
 class Game
@@ -14,13 +15,21 @@ class Game
 
   def play(ship_mode)
     welcome
-    @board.place_ships_on_grid(ship_mode)
+    place_ships_on_grid(ship_mode)
     present_board(@board.grid)
-    marks = @board.grid.values.flatten
     until @board.hit_all?(@board.grid)
       turn(@board.grid)
     end
     goodbye
+  end
+
+  def place_ships_on_grid(ship_mode)
+    if ship_mode == 1
+      @board.grid_with_one_hardcoded_ship
+    elsif ship_mode == 2
+      computer_player = ComputerPlayer.new(@board)
+      computer_player.generate_ships
+    end
   end
 
   def turn(grid)
