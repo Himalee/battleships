@@ -5,6 +5,7 @@ require_relative "display"
 require_relative "board"
 require_relative "messages"
 require_relative "ship"
+require_relative "coordinate_validator"
 
 messages = Messages.new
 display = Display.new(messages)

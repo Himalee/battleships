@@ -27,7 +27,8 @@ class Game
     if ship_mode == 1
       @board.grid_with_one_hardcoded_ship
     elsif ship_mode == 2
-      computer_player = ComputerPlayer.new(@board)
+      validator = CoordinateValidator.new(@board)
+      computer_player = ComputerPlayer.new(@board, validator)
       computer_player.generate_ships
     end
   end

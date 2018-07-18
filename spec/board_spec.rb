@@ -8,6 +8,8 @@ describe Board do
     @board = Board.new(9)
   end
 
+  let(:coordinates) { ["A", 1, 2, 3] }
+
   it "returns hash of 9x9 grid" do
     expect(@board.create_grid).to eql({"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, 2, 3]})
   end
@@ -28,6 +30,10 @@ describe Board do
 
     it "given 2 coordinates C2 & C3 placing ship on board" do
       expect(@board.grid_with_one_hardcoded_ship).to eql({"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]})
+    end
+
+    it "marks board with a ship given ship coordinates" do
+      expect(@board.mark_board_with_ship(coordinates)).to eql({"A"=>["-", "-", "-"], "B"=>[1, 2, 3], "C"=>[1, 2, 3]})
     end
   end
 
