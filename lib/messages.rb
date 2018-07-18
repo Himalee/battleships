@@ -13,11 +13,11 @@ class Messages
   end
 
   def hit_mark
-    "🔥"
+    "X"
   end
 
   def miss_mark
-    "🌊"
+    "O"
   end
 
   def ship_mark
@@ -38,5 +38,9 @@ class Messages
 
   def retry_message
     "You missed, try again.."
+  end
+
+  def hit_message
+    "You have hit a boat, keep trying.."
   end
 end
