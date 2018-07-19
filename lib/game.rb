@@ -7,7 +7,8 @@ require_relative "computer_player"
 
 
 class Game
-
+  HARDCODED_MODE = 1
+  COMPUTER_MODE = 2
   def initialize(display, board)
     @display = display
     @board = board
@@ -24,9 +25,9 @@ class Game
   end
 
   def place_ships_on_grid(ship_mode)
-    if ship_mode == 1
+    if ship_mode == HARDCODED_MODE
       @board.grid_with_one_hardcoded_ship
-    elsif ship_mode == 2
+    elsif ship_mode == COMPUTER_MODE
       validator = CoordinateValidator.new(@board)
       computer_player = ComputerPlayer.new(@board, validator)
       computer_player.generate_ships
