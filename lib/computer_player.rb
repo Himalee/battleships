@@ -6,14 +6,14 @@ class ComputerPlayer
   end
 
   def generate_ships
-    randomly_place_ship(Ship.new.carrier)
-    randomly_place_ship(Ship.new.battle_ship)
-    randomly_place_ship(Ship.new.cruiser)
-    randomly_place_ship(Ship.new.submarine)
-    randomly_place_ship(Ship.new.destroyer)
+    place_ship(Ship.new.carrier)
+    place_ship(Ship.new.battle_ship)
+    place_ship(Ship.new.cruiser)
+    place_ship(Ship.new.submarine)
+    place_ship(Ship.new.destroyer)
   end
 
-  def randomly_place_ship(ship_length)
+  def place_ship(ship_length)
     if @validator.valid_ship?(ship_length)
       coordinates = get_valid_coordinates(ship_length)
       @board.mark_board_with_ship(coordinates)
