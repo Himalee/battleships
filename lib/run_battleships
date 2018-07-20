@@ -3,13 +3,15 @@
 require_relative "game"
 require_relative "display"
 require_relative "board"
-require_relative "messages"
+require_relative "message"
 require_relative "ship"
 require_relative "coordinate_validator"
+# require_relative "human_player"
 
-messages = Messages.new
-display = Display.new(messages)
+message = Message.new
 dimension = 25
 board = Board.new(dimension)
+validator = CoordinateValidator.new(board)
+display = Display.new(message, validator)
 game = Game.new(display, board)
-game.play(2)
+game.play(3)

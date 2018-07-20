@@ -28,12 +28,6 @@ describe ComputerPlayer do
       @computer_player.place_ship(ship_size)
       expect(@board.grid).to eql({"A"=>["-", "-"], "B"=>[1, 2]}).or(eq({"A"=>[1, 2], "B"=>["-", "-"]}))
     end
-
-    it "returns unmarked gird given invalid ship length" do
-      invalid_ship_length = 3
-      @computer_player.place_ship(invalid_ship_length)
-      expect(@board.grid).to eql({"A"=>[1, 2], "B"=>[1, 2]})
-    end
   end
 
   context "places 5 ships on 10x10 grid" do

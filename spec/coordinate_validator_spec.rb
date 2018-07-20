@@ -15,6 +15,6 @@ describe CoordinateValidator do
 
   it "returns false given invalid coordinates test" do
     @board.mark_board_with_ship(coordinates)
-    expect(@validator.coordinates_do_not_include_ship?(coordinates)).to be false
+    expect(@validator.coordinates_do_not_include_ship?(["A", "-", "-"])).to be false
   end
 end

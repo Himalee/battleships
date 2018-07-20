@@ -1,23 +1,15 @@
-class ComputerPlayer
+require_relative "player"
+
+class ComputerPlayer < Player
 
   def initialize(board, validator)
-    @board = board
+    super(board)
     @validator = validator
   end
 
-  def generate_ships
-    place_ship(Ship.new.carrier)
-    place_ship(Ship.new.battle_ship)
-    place_ship(Ship.new.cruiser)
-    place_ship(Ship.new.submarine)
-    place_ship(Ship.new.destroyer)
-  end
-
   def place_ship(ship_length)
-    if @validator.valid_ship?(ship_length)
-      coordinates = get_valid_coordinates(ship_length)
-      @board.mark_board_with_ship(coordinates)
-    end
+    coordinates = get_valid_coordinates(ship_length)
+    @board.mark_board_with_ship(coordinates)
   end
 
   def get_valid_coordinates(ship_size)
@@ -31,15 +23,12 @@ class ComputerPlayer
 
   def get_right_direction_coordinates(ship_size)
     column_options = []
-    random_column = @validator.valid_column(ship_size)
+    first_column = @validator.valid_column(ship_size).sample
     random_row = @validator.possible_rows.sample
     column_options << random_row
-    length_of_boat = 0
-    until length_of_boat == ship_size
-      column_options << random_column
-      random_column += 1
-      length_of_boat += 1
-    end
-    column_options
+    column = @board.grid[random_row]
+    columns = column.slice(first_column - 1, ship_size)
+    column_options << columns
+    column_options.flatten
   end
 end

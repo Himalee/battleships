@@ -10,8 +10,7 @@ class CoordinateValidator
 
   def valid_column(ship_size)
     restriction = ship_size - 1
-    valid_columns = possible_columns[0...-restriction]
-    valid_columns.sample
+    possible_columns[0...-restriction]
   end
 
   def possible_columns
@@ -24,14 +23,11 @@ class CoordinateValidator
   end
 
   def coordinates_do_not_include_ship?(coordinates)
-    length_of_boat = coordinates.count - 1
-    index = 1
-    array = []
-    until index > length_of_boat
-      array << @board.grid[coordinates[0]][coordinates[index] - 1]
-      index += 1
-    end
-    !array.include?(ship_mark)
+    !coordinates.include?(ship_mark)
+  end
+
+  def ship_at?(location)
+    ships.any? { |ship| ship.at?(location)}
   end
 
   def ship_mark
