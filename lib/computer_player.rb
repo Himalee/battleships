@@ -22,13 +22,16 @@ class ComputerPlayer < Player
   end
 
   def get_right_direction_coordinates(ship_size)
-    column_options = []
+    coordinates = []
     first_column = @validator.valid_column(ship_size).sample
     random_row = @validator.possible_rows.sample
-    column_options << random_row
+    coordinates << random_row
+    coordinates << extract_coordinates(random_row, first_column, ship_size)
+    coordinates.flatten
+  end
+
+  def extract_coordinates(random_row, first_column, ship_size)
     column = @board.grid[random_row]
-    columns = column.slice(first_column - 1, ship_size)
-    column_options << columns
-    column_options.flatten
+    column.slice(first_column - 1, ship_size)
   end
 end

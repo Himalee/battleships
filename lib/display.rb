@@ -129,18 +129,29 @@ class Display
     end
   end
 
-  def get_right_direction_coordinates(ship_size, board) 
-    ship_type(ship_size)
-    prompt_for_ship_row
+  def get_right_direction_coordinates(ship_size, board)
     coordinates = []
-    row = get_valid_ship_row(board.size_of_board)
+    display_ship_size(ship_size)
+    row = get_row(board)
     coordinates << row
-    prompt_for_ship_column
-    first_column = get_valid_ship_column(ship_size)
-    column = board.grid[row]
-    columns = column.slice(first_column - 1, ship_size)
-    coordinates << columns
+    first_column = get_first_column(ship_size)
+    coordinates << extract_coordinates(board, row, first_column, ship_size)
     coordinates.flatten
+  end
+
+  def get_row(board)
+    prompt_for_ship_row
+    get_valid_ship_row(board.size_of_board)
+  end
+
+  def get_first_column(ship_size)
+    prompt_for_ship_column
+    get_valid_ship_column(ship_size)
+  end
+
+  def extract_coordinates(board, row, first_column, ship_size)
+    column  = board.grid[row]
+    column.slice(first_column - 1, ship_size)
   end
 
   def get_valid_coordinates(ship_length, board)
@@ -153,7 +164,7 @@ class Display
     end
   end
 
-  def ship_type(ship_length)
+  def display_ship_size(ship_length)
     @console.present(@message.ship_length(ship_length))
   end
 end
