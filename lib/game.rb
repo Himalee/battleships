@@ -2,6 +2,9 @@ require_relative "messages"
 require_relative "console"
 require_relative "display"
 require_relative "board"
+require_relative "peg"
+require_relative "computer_player"
+
 
 class Game
 
@@ -10,51 +13,38 @@ class Game
     @board = board
   end
 
-  def play
+  def play(ship_mode)
     welcome
-    present_board
-    @result1 = turn(board_with_ship)
-    until hit_all?(@result1[0])
-      @result1 = turn(@result1[1])
+    place_ships_on_grid(ship_mode)
+    present_board(@board.grid)
+    until @board.hit_all?(@board.grid)
+      turn(@board.grid)
+    end
+    goodbye
+  end
+
+  def place_ships_on_grid(ship_mode)
+    if ship_mode == 1
+      @board.grid_with_one_hardcoded_ship
+    elsif ship_mode == 2
+      computer_player = ComputerPlayer.new(@board)
+      computer_player.generate_ships
     end
   end
 
-  def turn(board)
-    result = []
+  def turn(grid)
     get_coordinates
-    coordinate = board[@row][@column.to_i]
-    outcome = @board.hit_or_miss(board, @row, @column.to_i)
-    new_board = mark_board_with_hit_or_miss(outcome, board)
-    @display.present_board(new_board)
-    all_boats_hit = @board.hit_all(new_board)
-    win_or_retry_message(outcome, all_boats_hit)
-    result << all_boats_hit
-    result << new_board
-    result
-  end
-
-  def hit_all?(all_boats_hit)
-    all_boats_hit == "hit all"
+    mark_board_with_hit_or_miss
+    present_board(@board.grid)
+    win_or_retry_message
   end
 
   def welcome
     @display.welcome
   end
 
-  def hash_grid
-    @board.create_grid(dimension_of_board)
-  end
-
-  def dimension_of_board
-    100
-  end
-
-  def present_board
-    @display.present_board(hash_grid)
-  end
-
-  def board_with_ship
-    @board.place_ship(hash_grid)
+  def present_board(grid)
+    @display.present_board(grid)
   end
 
   def get_coordinates
@@ -65,32 +55,36 @@ class Game
   end
 
   def get_row
-    @display.valid_row(Math.sqrt(dimension_of_board))
+    @display.valid_row(Math.sqrt(@board.dimension))
   end
 
   def get_column
-    @display.valid_column(Math.sqrt(dimension_of_board))
+    @display.valid_column(Math.sqrt(@board.dimension))
   end
 
-  def state_of_board(board, mark)
-    @board.mark_board(board, @row, @column.to_i, mark)
+  def state_of_board(mark)
+    @board.mark_board(@row, @column.to_i, mark)
   end
 
-  def mark_board_with_hit_or_miss(outcome, board)
-    if outcome == "miss"
-      state_of_board(board, @display.miss)
+  def mark_board_with_hit_or_miss
+    if @board.hit?(@board.grid, @row, @column.to_i)
+      state_of_board(Peg.new.hit)
     else
-      state_of_board(board, @display.hit)
+      state_of_board(Peg.new.miss)
     end
   end
 
-  def win_or_retry_message(outcome, all_boats_hit)
-    if outcome == "hit" && all_boats_hit == "hit all"
+  def win_or_retry_message
+    if @board.hit_all?(@board.grid)
       @display.present_winning_message
-    elsif outcome == "hit"
-      @display.hit_boat_message
+    elsif @board.hit?(@board.grid, @row, @column.to_i)
+      @display.present_hit_boat_message
     else
       @display.present_retry_message
     end
+  end
+
+  def goodbye
+    @display.present_goodbye_message
   end
 end

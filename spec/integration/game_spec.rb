@@ -1,16 +1,16 @@
 require "game"
 
 describe Game do
-  context "one guess" do
+  context "one hard coded ship" do
     it "returns win" do
       messages = Messages.new
       output = StringIO.new
       input = StringIO.new("C\n2\nC\n3")
       console = Console.new(output, input)
       display = Display.new(console, messages)
-      board = Board.new
+      board = Board.new(100)
       game = Game.new(display, board)
-      game.play
+      game.play(1)
       expect(output.string).to include("You win!")
     end
 
@@ -21,10 +21,10 @@ describe Game do
         input = StringIO.new("A\n1\nB\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
         display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
         game = Game.new(display, board)
 
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
 
@@ -34,9 +34,9 @@ describe Game do
         input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
         display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
         game = Game.new(display, board)
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
     end
