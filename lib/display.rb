@@ -43,18 +43,6 @@ class Display
     end
   end
 
-  def user_input_coordinate
-    @console.receive
-  end
-
-  def user_input_row
-    @console.present(@message.prompt_for_row)
-  end
-
-  def user_input_column
-    @console.present(@message.prompt_for_column)
-  end
-
   def valid_row(size)
     alphabet = ("A".."Z").to_a
     letter = alphabet[size - 1]
@@ -79,28 +67,12 @@ class Display
     end
   end
 
-  def present_winning_message
-    @console.present(@message.winning_message)
+  def user_input_row
+    @console.present(@message.prompt_for_row)
   end
 
-  def present_retry_message
-    @console.present(@message.retry_message)
-  end
-
-  def present_hit_boat_message
-    @console.present(@message.hit_message)
-  end
-
-  def present_goodbye_message
-    @console.present(@message.goodbye)
-  end
-
-  def prompt_for_ship_row
-    @console.present(@message.prompt_for_ship_row)
-  end
-
-  def prompt_for_ship_column
-    @console.present(@message.prompt_for_ship_column)
+  def user_input_column
+    @console.present(@message.prompt_for_column)
   end
 
   def get_valid_ship_row(size_of_board)
@@ -114,10 +86,6 @@ class Display
     end
   end
 
-  def incorrect_ship_coordinate
-    @console.present(@message.invalid_coordinate)
-  end
-
   def get_valid_ship_column(ship_size)
     columns = @validator.valid_column(ship_size)
     column_for_ship = user_input_coordinate.to_i
@@ -129,6 +97,28 @@ class Display
     end
   end
 
+  def user_input_coordinate
+    @console.receive
+  end
+
+  def prompt_for_ship_row
+    @console.present(@message.prompt_for_ship_row)
+  end
+
+  def prompt_for_ship_column
+    @console.present(@message.prompt_for_ship_column)
+  end
+
+  def get_valid_coordinates(ship_length, board)
+    coordinates = get_right_direction_coordinates(ship_length, board)
+    if @validator.coordinates_do_not_include_ship?(coordinates)
+      coordinates
+    else
+      incorrect_ship_coordinate
+      get_valid_coordinates(ship_length, board)
+    end
+  end
+
   def get_right_direction_coordinates(ship_size, board)
     coordinates = []
     display_ship_size(ship_size)
@@ -137,6 +127,10 @@ class Display
     first_column = get_first_column(ship_size)
     coordinates << extract_coordinates(board, row, first_column, ship_size)
     coordinates.flatten
+  end
+
+  def incorrect_ship_coordinate
+    @console.present(@message.invalid_coordinate)
   end
 
   def get_row(board)
@@ -154,17 +148,23 @@ class Display
     column.slice(first_column - 1, ship_size)
   end
 
-  def get_valid_coordinates(ship_length, board)
-    coordinates = get_right_direction_coordinates(ship_length, board)
-    if @validator.coordinates_do_not_include_ship?(coordinates)
-      coordinates
-    else
-      incorrect_ship_coordinate
-      get_valid_coordinates(ship_length, board)
-    end
-  end
-
   def display_ship_size(ship_length)
     @console.present(@message.ship_length(ship_length))
+  end
+
+  def present_winning_message
+    @console.present(@message.winning_message)
+  end
+
+  def present_retry_message
+    @console.present(@message.retry_message)
+  end
+
+  def present_hit_boat_message
+    @console.present(@message.hit_message)
+  end
+
+  def present_goodbye_message
+    @console.present(@message.goodbye)
   end
 end
