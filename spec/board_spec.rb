@@ -1,5 +1,4 @@
 require "board"
-require "ship"
 require "peg"
 
 describe Board do
@@ -29,7 +28,7 @@ describe Board do
     end
 
     it "given 2 coordinates C2 & C3 placing ship on board" do
-      expect(@board.grid_with_one_hardcoded_ship).to eql({"A"=>[1, 2, 3], "B"=>[1, 2, 3], "C"=>[1, "-", "-"]})
+      expect(@board.grid_with_one_hardcoded_ship).to eql({"A"=>["-", "-", 3], "B"=>[1, 2, 3], "C"=>[1, 2, 3]})
     end
 
     it "marks board with a ship given ship coordinates" do
@@ -39,26 +38,43 @@ describe Board do
 
   context "grid with one ship" do
     it "given missed coordinate, returns false" do
-      expect(@board.hit?(@board.grid_with_one_hardcoded_ship, "A", 1)).to be false
-      expect(@board.hit?(@board.grid_with_one_hardcoded_ship, "C", 1)).to be false
+      expect(@board.includes_mark?("A", 1, Peg::SHIP)).to be false
+      expect(@board.includes_mark?("C", 1, Peg::SHIP)).to be false
     end
 
     it "given a hit coordinate, returns true" do
-      expect(@board.hit?(@board.grid_with_one_hardcoded_ship, "C", 2)).to be true
-      expect(@board.hit?(@board.grid_with_one_hardcoded_ship, "C", 3)).to be true
+      @board.grid_with_one_hardcoded_ship
+      expect(@board.includes_mark?("A", 1, Peg::SHIP)).to be true
+      expect(@board.includes_mark?("A", 2, Peg::SHIP)).to be true
     end
 
     it "given all hit coordinates, returns true" do
       @board.grid_with_one_hardcoded_ship
-      @board.mark_board("C", 2, "X")
-      @board.mark_board("C", 3, "X")
+      @board.mark_board("A", 1, "X")
+      @board.mark_board("A", 2, "X")
       expect(@board.hit_all?(@board.grid)).to be true
     end
 
     it "not given all hit coordinates, returns false" do
       @board.grid_with_one_hardcoded_ship
-      @board.mark_board("C", 2, "X")
+      @board.mark_board("B", 2, "X")
       expect(@board.hit_all?(@board.grid)).to be false
+    end
+  end
+
+  context "coordinate can only be chosen once" do
+    it "returns false given coordinate with no mark" do
+      expect(@board.includes_mark?("A", 1, Peg::HIT)).to be false
+    end
+
+    it "returns true given coordinate with hit mark" do
+      @board.mark_board("C", 2, "X")
+      expect(@board.includes_mark?("C", 2, Peg::HIT)).to be true
+    end
+
+    it "returns true given coordinate with miss mark" do
+      @board.mark_board("C", 2, "O")
+      expect(@board.includes_mark?("C", 2, Peg::MISS)).to be true
     end
   end
 end

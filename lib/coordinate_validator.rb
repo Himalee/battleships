@@ -31,6 +31,6 @@ class CoordinateValidator
   end
 
   def ship_mark
-    Peg.new.ship
+    Peg::SHIP
   end
 end

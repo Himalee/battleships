@@ -36,8 +36,17 @@ describe ComputerPlayer do
       validator = CoordinateValidator.new(board)
       computer_player = ComputerPlayer.new(board, validator)
       computer_player.generate_ships
-      number_of_ship_marks = board.grid.values.flatten.count(Peg.new.ship)
+      number_of_ship_marks = board.grid.values.flatten.count(Peg::SHIP)
       expect(number_of_ship_marks).to eql(17)
+    end
+  end
+
+  context "computer guesses where ships are" do
+    it "returns valid coordinate" do
+      @board.mark_board("A", 1, "O")
+      @board.mark_board("A", 2, "O")
+      @board.mark_board("B", 1, "O")
+      expect(@computer_player.get_coordinate_guess).to eql(["B", 2])
     end
   end
 end

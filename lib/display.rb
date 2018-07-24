@@ -25,7 +25,7 @@ class Display
 
   def present_grid_showing_ship(board)
     board.each do |letter, cells|
-    @console.present("#{letter} #{cells}")
+      @console.present("#{letter} #{cells}")
     end
   end
 
@@ -36,23 +36,11 @@ class Display
   end
 
   def reveal(cell)
-    if cell != Peg.new.miss && cell != Peg.new.hit
-      Peg.new.board
+    if cell != Peg::MISS && cell != Peg::HIT
+      Peg::BOARD
     else
       cell
     end
-  end
-
-  def user_input_coordinate
-    @console.receive
-  end
-
-  def user_input_row
-    @console.present(@message.prompt_for_row)
-  end
-
-  def user_input_column
-    @console.present(@message.prompt_for_column)
   end
 
   def valid_row(size)
@@ -79,6 +67,91 @@ class Display
     end
   end
 
+  def user_input_row
+    @console.present(@message.prompt_for_row)
+  end
+
+  def user_input_column
+    @console.present(@message.prompt_for_column)
+  end
+
+  def get_valid_ship_row(size_of_board)
+    rows = @validator.possible_rows
+    row_for_ship = user_input_coordinate.upcase
+    if !rows.include?(row_for_ship)
+      prompt_for_ship_row
+      get_valid_ship_row(size_of_board)
+    else
+      row_for_ship
+    end
+  end
+
+  def get_valid_ship_column(ship_size)
+    columns = @validator.valid_column(ship_size)
+    column_for_ship = user_input_coordinate.to_i
+    if !columns.include?(column_for_ship)
+      prompt_for_ship_column
+      get_valid_ship_column(ship_size)
+    else
+      column_for_ship
+    end
+  end
+
+  def user_input_coordinate
+    @console.receive
+  end
+
+  def prompt_for_ship_row
+    @console.present(@message.prompt_for_ship_row)
+  end
+
+  def prompt_for_ship_column
+    @console.present(@message.prompt_for_ship_column)
+  end
+
+  def get_valid_coordinates(ship_length, board)
+    coordinates = get_right_direction_coordinates(ship_length, board)
+    if @validator.coordinates_do_not_include_ship?(coordinates)
+      coordinates
+    else
+      incorrect_ship_coordinate
+      get_valid_coordinates(ship_length, board)
+    end
+  end
+
+  def get_right_direction_coordinates(ship_size, board)
+    coordinates = []
+    display_ship_size(ship_size)
+    row = get_row(board)
+    coordinates << row
+    first_column = get_first_column(ship_size)
+    coordinates << extract_coordinates(board, row, first_column, ship_size)
+    coordinates.flatten
+  end
+
+  def incorrect_ship_coordinate
+    @console.present(@message.invalid_coordinate)
+  end
+
+  def get_row(board)
+    prompt_for_ship_row
+    get_valid_ship_row(board.size_of_board)
+  end
+
+  def get_first_column(ship_size)
+    prompt_for_ship_column
+    get_valid_ship_column(ship_size)
+  end
+
+  def extract_coordinates(board, row, first_column, ship_size)
+    row = board.grid[row]
+    row.slice(first_column - 1, ship_size)
+  end
+
+  def display_ship_size(ship_length)
+    @console.present(@message.ship_length(ship_length))
+  end
+
   def present_winning_message
     @console.present(@message.winning_message)
   end
@@ -93,78 +166,5 @@ class Display
 
   def present_goodbye_message
     @console.present(@message.goodbye)
-  end
-
-  def prompt_for_ship_row
-    @console.present(@message.prompt_for_ship_row)
-  end
-
-  def prompt_for_ship_column
-    @console.present(@message.prompt_for_ship_column)
-  end
-
-  def get_valid_ship_row(size_of_board)
-    rows = @validator.possible_rows
-    row_for_ship = user_input_coordinate.upcase
-    if !rows.include?(row_for_ship)
-      prompt_for_ship_row
-      get_valid_ship_row(size_of_board)
-    else
-      row_for_ship
-    end
-  end
-
-  def incorrect_ship_coordinate
-    @console.present(@message.invalid_coordinate)
-  end
-
-  def get_valid_ship_column(ship_size)
-    columns = @validator.valid_column(ship_size)
-    column_for_ship = user_input_coordinate.to_i
-    if !columns.include?(column_for_ship)
-      prompt_for_ship_column
-      get_valid_ship_column(ship_size)
-    else
-      column_for_ship
-    end
-  end
-
-  def get_right_direction_coordinates(ship_size, board)
-    coordinates = []
-    display_ship_size(ship_size)
-    row = get_row(board)
-    coordinates << row
-    first_column = get_first_column(ship_size)
-    coordinates << extract_coordinates(board, row, first_column, ship_size)
-    coordinates.flatten
-  end
-
-  def get_row(board)
-    prompt_for_ship_row
-    get_valid_ship_row(board.size_of_board)
-  end
-
-  def get_first_column(ship_size)
-    prompt_for_ship_column
-    get_valid_ship_column(ship_size)
-  end
-
-  def extract_coordinates(board, row, first_column, ship_size)
-    column  = board.grid[row]
-    column.slice(first_column - 1, ship_size)
-  end
-
-  def get_valid_coordinates(ship_length, board)
-    coordinates = get_right_direction_coordinates(ship_length, board)
-    if @validator.coordinates_do_not_include_ship?(coordinates)
-      coordinates
-    else
-      incorrect_ship_coordinate
-      get_valid_coordinates(ship_length, board)
-    end
-  end
-
-  def display_ship_size(ship_length)
-    @console.present(@message.ship_length(ship_length))
   end
 end

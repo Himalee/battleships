@@ -1,6 +1,10 @@
 class Board
 
-  attr_reader :dimension, :grid
+  private
+  attr_reader :dimension
+
+  public
+  attr_reader :grid
 
   def initialize(dimension)
     @dimension = dimension
@@ -28,8 +32,8 @@ class Board
   end
 
   def grid_with_one_hardcoded_ship
-    mark_board("C", 2, ship_mark)
-    mark_board("C", 3, ship_mark)
+    mark_board("A", 1, ship_mark)
+    mark_board("A", 2, ship_mark)
     @grid
   end
 
@@ -39,12 +43,12 @@ class Board
   end
 
   def ship_mark
-    Peg.new.ship
+    Peg::SHIP
   end
 
-  def hit?(grid_with_ships, row, column)
-    coordinate = grid_with_ships[row][column - 1]
-    coordinate == ship_mark
+  def includes_mark?(row, column, mark)
+    coordinate = @grid[row][column - 1]
+    coordinate == mark
   end
 
   def hit_all?(grid_with_ships)
@@ -53,11 +57,9 @@ class Board
   end
 
   def mark_board_with_ship(coordinates)
-    length_of_boat = coordinates.count - 1
-    index = 1
-    until index > length_of_boat
-      mark_board(coordinates[0], coordinates[index], ship_mark)
-      index += 1
+    columns = coordinates.drop(1)
+    columns.each do |column|
+      mark_board(coordinates[0], column, ship_mark)
     end
     @grid
   end
