@@ -95,15 +95,15 @@ class Game
     @display.valid_column(@board.size_of_board)
   end
 
-  def state_of_board(mark)
+  def mark_board(mark)
     @board.mark_board(@row, @column.to_i, mark)
   end
 
   def mark_board_with_hit_or_miss
     if @board.includes_mark?(@row, @column.to_i, Peg.new.ship)
-      state_of_board(Peg.new.hit)
+      mark_board(Peg.new.hit)
     else
-      state_of_board(Peg.new.miss)
+      mark_board(Peg.new.miss)
     end
   end
 
