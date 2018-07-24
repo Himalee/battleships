@@ -1,0 +1,7 @@
+module Ship
+  CARRIER = 5
+  BATTLE_SHIP = 4
+  CRUISER = 3
+  SUBMARINE = 3
+  DESTROYER = 2
+end
