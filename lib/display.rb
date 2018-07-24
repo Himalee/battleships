@@ -25,7 +25,7 @@ class Display
 
   def present_grid_showing_ship(board)
     board.each do |letter, cells|
-    @console.present("#{letter} #{cells}")
+      @console.present("#{letter} #{cells}")
     end
   end
 
