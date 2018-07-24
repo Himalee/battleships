@@ -1,41 +1,44 @@
 require "game"
 
 describe Game do
-  context "one guess" do
+  context "one hard coded ship" do
     it "returns win" do
-      messages = Messages.new
+      message = Message.new
       output = StringIO.new
-      input = StringIO.new("C\n2")
+      input = StringIO.new("C\n2\nC\n3")
       console = Console.new(output, input)
-      display = Display.new(console, messages)
-      board = Board.new
+      board = Board.new(100)
+      validator = CoordinateValidator.new(board)
+      display = Display.new(console, message, validator)
       game = Game.new(display, board)
-      game.play
+      game.play(1)
       expect(output.string).to include("You win!")
     end
 
     context "more than one guess" do
       it "returns prompt to keep guessing" do
-        messages = Messages.new
+        message = Message.new
         output = StringIO.new
-        input = StringIO.new("A\n1\nB\n1\nC\n2")
+        input = StringIO.new("A\n1\nB\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
-        display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
+        validator = CoordinateValidator.new(board)
+        display = Display.new(console, message, validator)
         game = Game.new(display, board)
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
 
       it "returns prompt to keep guessing with invalid moves" do
-        messages = Messages.new
+        message = Message.new
         output = StringIO.new
-        input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n1\nC\n2")
+        input = StringIO.new("a\nhello\n2\nworld\nB\n1\nC\n1\nC\n2\nC\n3")
         console = Console.new(output, input)
-        display = Display.new(console, messages)
-        board = Board.new
+        board = Board.new(100)
+        validator = CoordinateValidator.new(board)
+        display = Display.new(console, message, validator)
         game = Game.new(display, board)
-        game.play
+        game.play(1)
         expect(output.string).to include("You missed, try again")
       end
     end

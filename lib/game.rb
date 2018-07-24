@@ -1,52 +1,57 @@
-class Game
+require_relative "message"
+require_relative "console"
+require_relative "display"
+require_relative "board"
+require_relative "peg"
+require_relative "computer_player"
+require_relative "human_player"
 
+
+class Game
+  HARDCODED_MODE = 1
+  COMPUTER_MODE = 2
+  HUMAN_MODE = 3
   def initialize(display, board)
     @display = display
     @board = board
   end
 
-  def play
+  def play(ship_mode)
     welcome
-    present_board
-    board_with_ship
-    get_coordinates
-    coordinate = board_with_ship[@row][@column.to_i]
-    outcome = @board.hit_or_miss(board_with_ship, @row, @column.to_i)
-    new_board = mark_board_with_hit_or_miss(outcome, board_with_ship)
-    @display.present_board(new_board)
-    win_or_retry_message(outcome)
-    replay(outcome, new_board)
+    place_ships_on_grid(ship_mode)
+    present_board(@board.grid)
+    until @board.hit_all?(@board.grid)
+      turn(@board.grid)
+    end
+    goodbye
   end
 
-  def replay(outcome, board)
-    while outcome == "miss"
-      get_coordinates
-      coordinate = board[@row][@column.to_i]
-      outcome = @board.hit_or_miss(board, @row, @column.to_i)
-      new_board = mark_board_with_hit_or_miss(outcome, board)
-      @display.present_board(new_board)
-      win_or_retry_message(outcome)
+  def place_ships_on_grid(ship_mode)
+    if ship_mode == HARDCODED_MODE
+      @board.grid_with_one_hardcoded_ship
+    elsif ship_mode == COMPUTER_MODE
+      validator = CoordinateValidator.new(@board)
+      computer_player = ComputerPlayer.new(@board, validator)
+      computer_player.generate_ships
+    elsif ship_mode == HUMAN_MODE
+      human_player = HumanPlayer.new(@board, @display)
+      human_player.generate_ships
     end
+  end
+
+  def turn(grid)
+    get_coordinates
+    mark_board_with_hit_or_miss
+    present_board(@board.grid)
+    win_or_retry_message
   end
 
   def welcome
     @display.welcome
   end
 
-  def hash_grid
-    @board.create_grid(dimension_of_board)
-  end
-
-  def dimension_of_board
-    100
-  end
-
-  def present_board
-    @display.present_board(hash_grid)
-  end
-
-  def board_with_ship
-    @board.place_ship(hash_grid)
+  def present_board(grid)
+    @display.present_board(grid)
   end
 
   def get_coordinates
@@ -57,30 +62,36 @@ class Game
   end
 
   def get_row
-    @display.valid_row(Math.sqrt(dimension_of_board))
+    @display.valid_row(@board.size_of_board)
   end
 
   def get_column
-    @display.valid_column(Math.sqrt(dimension_of_board))
+    @display.valid_column(@board.size_of_board)
   end
 
-  def state_of_board(board, mark)
-    @board.mark_board(board, @row, @column.to_i, mark)
+  def state_of_board(mark)
+    @board.mark_board(@row, @column.to_i, mark)
   end
 
-  def mark_board_with_hit_or_miss(outcome, board)
-    if outcome == "miss"
-      state_of_board(board, @display.miss)
+  def mark_board_with_hit_or_miss
+    if @board.hit?(@board.grid, @row, @column.to_i)
+      state_of_board(Peg.new.hit)
     else
-      state_of_board(board, @display.hit)
+      state_of_board(Peg.new.miss)
     end
   end
 
-  def win_or_retry_message(outcome)
-    if outcome == "miss"
-      @display.present_retry_message
-    elsif outcome == "hit"
+  def win_or_retry_message
+    if @board.hit_all?(@board.grid)
       @display.present_winning_message
+    elsif @board.hit?(@board.grid, @row, @column.to_i)
+      @display.present_hit_boat_message
+    else
+      @display.present_retry_message
     end
+  end
+
+  def goodbye
+    @display.present_goodbye_message
   end
 end
