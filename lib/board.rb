@@ -51,4 +51,14 @@ class Board
     marks = grid_with_ships.values.flatten
     !marks.include?(ship_mark)
   end
+
+  def mark_board_with_ship(coordinates)
+    length_of_boat = coordinates.count - 1
+    index = 1
+    until index > length_of_boat
+      mark_board(coordinates[0], coordinates[index], ship_mark)
+      index += 1
+    end
+    @grid
+  end
 end

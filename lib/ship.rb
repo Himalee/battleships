@@ -1,4 +1,5 @@
 class Ship
+
   def carrier
     5
   end

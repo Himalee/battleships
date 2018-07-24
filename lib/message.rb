@@ -1,4 +1,4 @@
-class Messages
+class Message
 
   def welcome_message
     "Welcome to Battleships! 🚢  ⛵  🛥\nA ship has been placed on the board:"
@@ -30,5 +30,21 @@ class Messages
 
   def goodbye
     "Goodbye 👋"
+  end
+
+  def prompt_for_ship_row
+    "To place the ship on the board, please choose a row"
+  end
+
+  def prompt_for_ship_column
+    "To place the ship on the board, please choose a column"
+  end
+
+  def invalid_coordinate
+    "A ship has already been placed here, choose another coordinate"
+  end
+
+  def ship_length(ship_length)
+    "The ship length is #{ship_length}"
   end
 end

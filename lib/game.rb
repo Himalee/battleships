@@ -1,13 +1,16 @@
-require_relative "messages"
+require_relative "message"
 require_relative "console"
 require_relative "display"
 require_relative "board"
 require_relative "peg"
 require_relative "computer_player"
+require_relative "human_player"
 
 
 class Game
-
+  HARDCODED_MODE = 1
+  COMPUTER_MODE = 2
+  HUMAN_MODE = 3
   def initialize(display, board)
     @display = display
     @board = board
@@ -24,11 +27,15 @@ class Game
   end
 
   def place_ships_on_grid(ship_mode)
-    if ship_mode == 1
+    if ship_mode == HARDCODED_MODE
       @board.grid_with_one_hardcoded_ship
-    elsif ship_mode == 2
-      computer_player = ComputerPlayer.new(@board)
+    elsif ship_mode == COMPUTER_MODE
+      validator = CoordinateValidator.new(@board)
+      computer_player = ComputerPlayer.new(@board, validator)
       computer_player.generate_ships
+    elsif ship_mode == HUMAN_MODE
+      human_player = HumanPlayer.new(@board, @display)
+      human_player.generate_ships
     end
   end
 
@@ -55,11 +62,11 @@ class Game
   end
 
   def get_row
-    @display.valid_row(Math.sqrt(@board.dimension))
+    @display.valid_row(@board.size_of_board)
   end
 
   def get_column
-    @display.valid_column(Math.sqrt(@board.dimension))
+    @display.valid_column(@board.size_of_board)
   end
 
   def state_of_board(mark)
