@@ -65,9 +65,9 @@ class Game
   def get_computer_coordinates
     @row = @board.possible_rows.sample
     @column = @board.possible_columns.sample
-    if @board.includes_mark?(@row, @column, Peg.new.hit)
+    if @board.includes_mark?(@row, @column, Peg::HIT)
       get_computer_coordinates
-    elsif @board.includes_mark?(@row, @column, Peg.new.miss)
+    elsif @board.includes_mark?(@row, @column, Peg::MISS)
       get_computer_coordinates
     end
   end
@@ -100,17 +100,17 @@ class Game
   end
 
   def mark_board_with_hit_or_miss
-    if @board.includes_mark?(@row, @column.to_i, Peg.new.ship)
-      mark_board(Peg.new.hit)
+    if @board.includes_mark?(@row, @column.to_i, Peg::SHIP)
+      mark_board(Peg::HIT)
     else
-      mark_board(Peg.new.miss)
+      mark_board(Peg::MISS)
     end
   end
 
   def win_or_retry_message
     if @board.hit_all?(@board.grid)
       @display.present_winning_message
-    elsif @board.includes_mark?(@row, @column.to_i, Peg.new.hit)
+    elsif @board.includes_mark?(@row, @column.to_i, Peg::HIT)
       @display.present_hit_boat_message
     else
       @display.present_retry_message

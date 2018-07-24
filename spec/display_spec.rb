@@ -23,14 +23,14 @@ describe Display do
     end
 
     it "displays detailed with hit mark" do
-      mark = Peg.new.hit
+      mark = Peg::HIT
       board = {"A"=>[1, 2, mark], "B"=>[1, 2, 3], "C"=>[1, 2, 3]}
       @display.present_board(board)
       expect(@output.string).to eql("0 1 2 3\nA . . #{mark}\nB . . .\nC . . .\n")
     end
 
     it "displays detailed grid with miss mark" do
-      mark = Peg.new.miss
+      mark = Peg::MISS
       board = {"A"=>[1, 2, mark], "B"=>[1, 2, 3], "C"=>[1, 2, 3]}
       @display.present_board(board)
       expect(@output.string).to eql("0 1 2 3\nA . . #{mark}\nB . . .\nC . . .\n")

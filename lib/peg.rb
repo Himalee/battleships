@@ -1,17 +1,6 @@
-class Peg
-  def hit
-    "X"
-  end
-
-  def miss
-    "O"
-  end
-
-  def ship
-    "-"
-  end
-
-  def board
-    "."
-  end
+module Peg
+  HIT = "X"
+  MISS = "O"
+  SHIP = "-"
+  BOARD = "."
 end

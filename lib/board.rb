@@ -43,7 +43,7 @@ class Board
   end
 
   def ship_mark
-    Peg.new.ship
+    Peg::SHIP
   end
 
   def includes_mark?(row, column, mark)

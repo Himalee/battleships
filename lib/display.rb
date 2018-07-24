@@ -36,8 +36,8 @@ class Display
   end
 
   def reveal(cell)
-    if cell != Peg.new.miss && cell != Peg.new.hit
-      Peg.new.board
+    if cell != Peg::MISS && cell != Peg::HIT
+      Peg::BOARD
     else
       cell
     end

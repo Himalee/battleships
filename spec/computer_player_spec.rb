@@ -36,7 +36,7 @@ describe ComputerPlayer do
       validator = CoordinateValidator.new(board)
       computer_player = ComputerPlayer.new(board, validator)
       computer_player.generate_ships
-      number_of_ship_marks = board.grid.values.flatten.count(Peg.new.ship)
+      number_of_ship_marks = board.grid.values.flatten.count(Peg::SHIP)
       expect(number_of_ship_marks).to eql(17)
     end
   end
