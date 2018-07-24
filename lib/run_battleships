@@ -13,6 +13,6 @@ board = Board.new(dimension)
 validator = CoordinateValidator.new(board)
 display = Display.new(message, validator)
 game = Game.new(display, board)
-ship_mode = 2
+ship_mode = 3
 player_mode = 5
 game.play(ship_mode, player_mode)
