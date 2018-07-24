@@ -144,8 +144,8 @@ class Display
   end
 
   def extract_coordinates(board, row, first_column, ship_size)
-    column  = board.grid[row]
-    column.slice(first_column - 1, ship_size)
+    row = board.grid[row]
+    row.slice(first_column - 1, ship_size)
   end
 
   def display_ship_size(ship_length)
