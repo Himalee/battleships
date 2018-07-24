@@ -1,6 +1,10 @@
 class Board
 
-  attr_reader :dimension, :grid
+  private
+  attr_reader :dimension
+
+  public
+  attr_reader :grid
 
   def initialize(dimension)
     @dimension = dimension
