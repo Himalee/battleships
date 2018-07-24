@@ -40,4 +40,13 @@ describe ComputerPlayer do
       expect(number_of_ship_marks).to eql(17)
     end
   end
+
+  context "computer guesses where ships are" do
+    it "returns valid coordinate" do
+      @board.mark_board("A", 1, "O")
+      @board.mark_board("A", 2, "O")
+      @board.mark_board("B", 1, "O")
+      expect(@computer_player.get_coordinate_guess).to eql(["B", 2])
+    end
+  end
 end

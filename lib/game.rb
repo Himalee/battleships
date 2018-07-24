@@ -9,8 +9,6 @@ require_relative "human_player"
 
 class Game
 
-  attr_reader :row, :column
-
   HARDCODED_MODE = 1
   COMPUTER_PLACES_SHIPS = 2
   HUMAN_PLACES_SHIPS = 3
@@ -47,29 +45,22 @@ class Game
 
   def turn(player_mode, grid)
     if player_mode == HUMAN_PLAYER
-      get_coordinates
-      present_marked_board
+      human_player = HumanPlayer.new(@board, @display)
+      coordinates = human_player.get_coordinate_guess
+      present_marked_board(coordinates)
     elsif player_mode == COMPUTER_PLAYER
-      get_computer_coordinates
-      present_marked_board
-      sleep(2)
+      validator = CoordinateValidator.new(@board)
+      computer_player = ComputerPlayer.new(@board, validator)
+      coordinates = computer_player.get_coordinate_guess
+      present_marked_board(coordinates)
+      sleep(1)
     end
   end
 
-  def present_marked_board
-    mark_board_with_hit_or_miss
+  def present_marked_board(coordinates)
+    mark_board_with_hit_or_miss(coordinates)
     present_board(@board.grid)
-    win_or_retry_message
-  end
-
-  def get_computer_coordinates
-    @row = @board.possible_rows.sample
-    @column = @board.possible_columns.sample
-    if @board.includes_mark?(@row, @column, Peg::HIT)
-      get_computer_coordinates
-    elsif @board.includes_mark?(@row, @column, Peg::MISS)
-      get_computer_coordinates
-    end
+    win_or_retry_message(coordinates)
   end
 
   def welcome
@@ -80,37 +71,22 @@ class Game
     @display.present_board(grid)
   end
 
-  def get_coordinates
-    @display.user_input_row
-    @row = get_row
-    @display.user_input_column
-    @column = get_column
+  def mark_board(mark, coordinates)
+    @board.mark_board(coordinates[0], coordinates[1], mark)
   end
 
-  def get_row
-    @display.valid_row(@board.size_of_board)
-  end
-
-  def get_column
-    @display.valid_column(@board.size_of_board)
-  end
-
-  def mark_board(mark)
-    @board.mark_board(@row, @column.to_i, mark)
-  end
-
-  def mark_board_with_hit_or_miss
-    if @board.includes_mark?(@row, @column.to_i, Peg::SHIP)
-      mark_board(Peg::HIT)
+  def mark_board_with_hit_or_miss(coordinates)
+    if @board.includes_mark?(coordinates[0], coordinates[1], Peg::SHIP)
+      mark_board(Peg::HIT, coordinates)
     else
-      mark_board(Peg::MISS)
+      mark_board(Peg::MISS, coordinates)
     end
   end
 
-  def win_or_retry_message
+  def win_or_retry_message(coordinates)
     if @board.hit_all?(@board.grid)
       @display.present_winning_message
-    elsif @board.includes_mark?(@row, @column.to_i, Peg::HIT)
+    elsif @board.includes_mark?(coordinates[0], coordinates[1], Peg::HIT)
       @display.present_hit_boat_message
     else
       @display.present_retry_message

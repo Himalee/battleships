@@ -32,8 +32,8 @@ class Board
   end
 
   def grid_with_one_hardcoded_ship
-    mark_board("C", 2, ship_mark)
-    mark_board("C", 3, ship_mark)
+    mark_board("A", 1, ship_mark)
+    mark_board("A", 2, ship_mark)
     @grid
   end
 
