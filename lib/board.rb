@@ -53,11 +53,9 @@ class Board
   end
 
   def mark_board_with_ship(coordinates)
-    length_of_boat = coordinates.count - 1
-    index = 1
-    until index > length_of_boat
-      mark_board(coordinates[0], coordinates[index], ship_mark)
-      index += 1
+    columns = coordinates.drop(1)
+    columns.each do |column|
+      mark_board(coordinates[0], column, ship_mark)
     end
     @grid
   end
