@@ -31,7 +31,7 @@ class ComputerPlayer < Player
   end
 
   def extract_coordinates(random_row, first_column, ship_size)
-    column = @board.grid[random_row]
-    column.slice(first_column - 1, ship_size)
+    row = @board.grid[random_row]
+    row.slice(first_column - 1, ship_size)
   end
 end

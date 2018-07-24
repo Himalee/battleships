@@ -1,5 +1,4 @@
 require "board"
-require "ship"
 require "peg"
 
 describe Board do
