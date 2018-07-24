@@ -11,7 +11,4 @@ class Player
     place_ship(Ship.new.submarine)
     place_ship(Ship.new.destroyer)
   end
-
-  def place_ship
-  end
 end
