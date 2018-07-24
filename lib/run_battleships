@@ -6,7 +6,6 @@ require_relative "board"
 require_relative "message"
 require_relative "ship"
 require_relative "coordinate_validator"
-# require_relative "human_player"
 
 message = Message.new
 dimension = 25
@@ -14,4 +13,6 @@ board = Board.new(dimension)
 validator = CoordinateValidator.new(board)
 display = Display.new(message, validator)
 game = Game.new(display, board)
-game.play(3)
+ship_mode = 2
+player_mode = 5
+game.play(ship_mode, player_mode)

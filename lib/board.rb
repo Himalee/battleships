@@ -42,9 +42,9 @@ class Board
     Peg.new.ship
   end
 
-  def hit?(grid_with_ships, row, column)
-    coordinate = grid_with_ships[row][column - 1]
-    coordinate == ship_mark
+  def includes_mark?(row, column, mark)
+    coordinate = @grid[row][column - 1]
+    coordinate == mark
   end
 
   def hit_all?(grid_with_ships)

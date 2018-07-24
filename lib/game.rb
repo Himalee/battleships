@@ -8,20 +8,26 @@ require_relative "human_player"
 
 
 class Game
+
+  attr_reader :row, :column
+
   HARDCODED_MODE = 1
-  COMPUTER_MODE = 2
-  HUMAN_MODE = 3
+  COMPUTER_PLACES_SHIPS = 2
+  HUMAN_PLACES_SHIPS = 3
+  HUMAN_PLAYER = 4
+  COMPUTER_PLAYER = 5
+
   def initialize(display, board)
     @display = display
     @board = board
   end
 
-  def play(ship_mode)
+  def play(ship_mode, player_mode)
     welcome
     place_ships_on_grid(ship_mode)
     present_board(@board.grid)
     until @board.hit_all?(@board.grid)
-      turn(@board.grid)
+      turn(player_mode, @board.grid)
     end
     goodbye
   end
@@ -29,21 +35,41 @@ class Game
   def place_ships_on_grid(ship_mode)
     if ship_mode == HARDCODED_MODE
       @board.grid_with_one_hardcoded_ship
-    elsif ship_mode == COMPUTER_MODE
+    elsif ship_mode == COMPUTER_PLACES_SHIPS
       validator = CoordinateValidator.new(@board)
       computer_player = ComputerPlayer.new(@board, validator)
       computer_player.generate_ships
-    elsif ship_mode == HUMAN_MODE
+    elsif ship_mode == HUMAN_PLACES_SHIPS
       human_player = HumanPlayer.new(@board, @display)
       human_player.generate_ships
     end
   end
 
-  def turn(grid)
-    get_coordinates
+  def turn(player_mode, grid)
+    if player_mode == HUMAN_PLAYER
+      get_coordinates
+      present_marked_board
+    elsif player_mode == COMPUTER_PLAYER
+      get_computer_coordinates
+      present_marked_board
+      sleep(2)
+    end
+  end
+
+  def present_marked_board
     mark_board_with_hit_or_miss
     present_board(@board.grid)
     win_or_retry_message
+  end
+
+  def get_computer_coordinates
+    @row = @board.possible_rows.sample
+    @column = @board.possible_columns.sample
+    if @board.includes_mark?(@row, @column, Peg.new.hit)
+      get_computer_coordinates
+    elsif @board.includes_mark?(@row, @column, Peg.new.miss)
+      get_computer_coordinates
+    end
   end
 
   def welcome
@@ -74,7 +100,7 @@ class Game
   end
 
   def mark_board_with_hit_or_miss
-    if @board.hit?(@board.grid, @row, @column.to_i)
+    if @board.includes_mark?(@row, @column.to_i, Peg.new.ship)
       state_of_board(Peg.new.hit)
     else
       state_of_board(Peg.new.miss)
@@ -84,7 +110,7 @@ class Game
   def win_or_retry_message
     if @board.hit_all?(@board.grid)
       @display.present_winning_message
-    elsif @board.hit?(@board.grid, @row, @column.to_i)
+    elsif @board.includes_mark?(@row, @column.to_i, Peg.new.hit)
       @display.present_hit_boat_message
     else
       @display.present_retry_message
